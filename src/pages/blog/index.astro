@@ -1,0 +1,49 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+
+const title = "Blog | Wonder Tinker"
+const description = "Published Web and AI engineering notes from Wonder Tinker."
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (left, right) => right.data.published.getTime() - left.data.published.getTime(),
+)
+
+const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://WonderRabbit.github.io")
+const siteHref = (href: string) => new URL(href.replace(/^\//, ""), baseUrl).pathname
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(date)
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/blog/">
+  <main id="main" class="site-shell page-stack">
+    <header class="page-header">
+      <p class="eyebrow">Published notes</p>
+      <h1>Blog</h1>
+      <p class="lede">
+        Static Web publishing, AI-assisted engineering, and source-backed build notes.
+        Draft entries are excluded from this index.
+      </p>
+    </header>
+
+    <section class="article-list article-list--wide" aria-label="Published posts">
+      {
+        posts.map((post) => (
+          <article class="article-row">
+            <div class="article-row__meta">
+              <time datetime={post.data.published.toISOString()}>{formatDate(post.data.published)}</time>
+              {post.data.updated && <span>Updated {formatDate(post.data.updated)}</span>}
+              <span>{post.data.category}</span>
+              {post.data.aiAssisted && <span>AI-assisted</span>}
+            </div>
+            <h2><a href={siteHref(`/blog/${post.id}/`)}>{post.data.title}</a></h2>
+            <p>{post.data.description}</p>
+            <div class="chip-list" aria-label="Post topics">
+              {post.data.tags.map((tag) => <span class="topic-chip">{tag}</span>)}
+            </div>
+          </article>
+        ))
+      }
+    </section>
+  </main>
+</BaseLayout>

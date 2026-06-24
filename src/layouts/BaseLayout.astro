@@ -1,0 +1,67 @@
+---
+import "../styles/global.css"
+
+const {
+  title,
+  description,
+  canonicalPath = "/",
+  pageType = "website",
+} = Astro.props
+const faviconHref = `${import.meta.env.BASE_URL}favicon.svg`
+const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://WonderRabbit.github.io")
+const normalizedPath = canonicalPath.replace(/^\//, "")
+const canonicalUrl = new URL(normalizedPath, baseUrl).toString()
+
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/blog/", label: "Blog" },
+  { href: "/about/", label: "About" },
+] as const
+
+const siteHref = (href: string) => new URL(href.replace(/^\//, ""), baseUrl).pathname
+
+interface Props {
+  readonly title: string
+  readonly description: string
+  readonly canonicalPath?: string
+  readonly pageType?: "website" | "article"
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href={faviconHref} type="image/svg+xml" />
+    <meta property="og:type" content={pageType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a class="site-nav__brand" href={siteHref("/")}>Wonder Tinker</a>
+        <div class="site-nav__links">
+          {navItems.map((item) => <a href={siteHref(item.href)}>{item.label}</a>)}
+        </div>
+      </nav>
+    </header>
+    <slot />
+    <footer class="site-footer">
+      <p>Wonder Tinker publishes Web and AI notes with visible dates, sources, and review boundaries.</p>
+      <nav aria-label="Footer navigation">
+        <a href={siteHref("/editorial-policy/")}>Editorial policy</a>
+        <a href={siteHref("/privacy/")}>Privacy</a>
+        <a href={siteHref("/rss.xml")}>RSS</a>
+      </nav>
+    </footer>
+  </body>
+</html>

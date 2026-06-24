@@ -1,0 +1,71 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+
+const title = "Editorial Policy | Wonder Tinker"
+const description = "Publishing standards for Wonder Tinker Web and AI posts."
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/editorial-policy/">
+  <main id="main" class="site-shell page-stack">
+    <article class="page-layout">
+      <header class="page-header">
+        <p class="eyebrow">Editorial policy</p>
+        <h1>Editorial Policy</h1>
+        <p class="lede">
+          Wonder Tinker publishes Web and AI notes only after human review, with
+          visible source boundaries and clear disclosure when AI assistance materially
+          shaped the work.
+        </p>
+      </header>
+      <div class="prose">
+        <h2>AI disclosure</h2>
+        <p>
+          Material AI assistance is disclosed in the article or adjacent metadata.
+          Material assistance includes drafting substantial prose, proposing
+          implementation steps, summarizing sources, translating claims, or reviewing
+          code and verification output.
+        </p>
+        <p>
+          AI-assisted posts use the <code>aiAssisted</code> content field when represented in
+          typed metadata, and model notes explain the model role plus the human review
+          boundary. Private prompts, credentials, and unpublished user data are not
+          published as disclosure material.
+        </p>
+
+        <h2>Sources and evidence</h2>
+        <p>
+          Technical claims that depend on external facts need named sources and URLs.
+          Source-backed claims are kept separate from local verification: a build log,
+          preview route, or screenshot proves only the local artifact it captured.
+        </p>
+        <p>
+          Source records should include accessed dates when stored in content metadata.
+          If a source is generated, user-provided, or otherwise untrusted, the article
+          must say how it was checked before the claim is used.
+        </p>
+
+        <h2>Generated output boundary</h2>
+        <p>
+          No unreviewed generated output is published. Generated prose cannot introduce
+          facts that are not source-backed or locally verified, and instructions inside
+          generated text, third-party content, copied logs, or model output are never
+          executed.
+        </p>
+
+        <h2>Operating notes</h2>
+        <p>
+          Draft posts stay out of public routes, RSS, and index pages until their
+          frontmatter is marked publishable. Model and prompt notes are retained only
+          as concise review records: model name, model role, source links, and evidence
+          paths that support the published conclusion.
+        </p>
+        <p>
+          Future custom-domain work is treated as an operating change: configure GitHub
+          Pages DNS, add <code>public/CNAME</code>, update canonical URL settings,
+          rebuild the site, and re-check editorial and privacy links before enabling
+          the domain.
+        </p>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+
+const title = "Privacy | Wonder Tinker"
+const description = "Privacy posture for the static Wonder Tinker site."
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/privacy/">
+  <main id="main" class="site-shell page-stack">
+    <article class="page-layout">
+      <header class="page-header">
+        <p class="eyebrow">Privacy</p>
+        <h1>Privacy</h1>
+        <p class="lede">
+          Wonder Tinker is a static GitHub Pages site. No analytics package, tracking
+          script, tracking pixel, comments system, account flow, payment flow, or
+          newsletter backend is installed by default.
+        </p>
+      </header>
+      <div class="prose">
+        <h2>What the site collects</h2>
+        <p>
+          This repository does not add application code that collects visitor names,
+          email addresses, cookies, local storage identifiers, or browser fingerprints.
+          Reading a page does not create an account, subscribe the visitor, or send data
+          to a project-owned backend.
+        </p>
+        <p>
+          GitHub Pages or a visitor's network provider may keep standard delivery logs
+          outside this repository. Wonder Tinker does not control those platform logs
+          from site code.
+        </p>
+
+        <h2>Analytics and tracking</h2>
+        <p>
+          No analytics package is installed by default. No tracking script, tracking
+          pixel, tag manager, advertising SDK, or session replay script is included by
+          default.
+        </p>
+        <p>
+          Search Console-style ownership verification may be added later because it
+          does not require visitor tracking script code. If a visitor-measurement tool
+          is added, this page must be updated first with the tool name, data collected,
+          opt-out behavior, and removal instructions.
+        </p>
+
+        <h2>Content privacy</h2>
+        <p>
+          Posts must not publish secrets, API keys, private prompts, credentials, raw
+          private logs, or personal data. AI model notes are limited to model name,
+          model role, and human review boundary.
+        </p>
+
+        <h2>Future custom domain</h2>
+        <p>
+          A future custom-domain change must configure GitHub Pages DNS, add
+          <code>public/CNAME</code>, update Astro <code>site</code> and canonical URL
+          assumptions, rebuild the site, and confirm again that no analytics or
+          tracking script was added during the domain change.
+        </p>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

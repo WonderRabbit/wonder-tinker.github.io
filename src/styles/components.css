@@ -1,0 +1,131 @@
+.eyebrow,
+.status-panel__label,
+.topic-card__label {
+  margin: 0 0 var(--space-3);
+  color: var(--text-tertiary);
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.status-panel,
+.primary-card,
+.topic-card,
+.article-row,
+.meta-panel {
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background: var(--surface-secondary);
+}
+
+.status-panel {
+  max-width: 360px;
+  padding: var(--space-5);
+}
+
+.status-panel__value {
+  margin-bottom: var(--space-2);
+  font-size: 20px;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.status-panel__meta,
+.primary-card p,
+.topic-card p {
+  margin-bottom: 0;
+  color: var(--text-secondary);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  padding-top: var(--space-10);
+}
+
+.primary-card {
+  padding: var(--space-6);
+}
+
+.text-link {
+  display: inline-flex;
+  margin-top: var(--space-6);
+}
+
+.topic-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+.topic-card {
+  min-height: 148px;
+  padding: var(--space-5);
+}
+
+.topic-card__label {
+  display: inline-flex;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 4px;
+  background: var(--status-info);
+  color: var(--accent-primary);
+}
+
+.article-list {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.article-list--wide {
+  gap: var(--space-5);
+}
+
+.article-row {
+  padding: var(--space-5);
+}
+
+.article-row h2,
+.article-row h3 {
+  margin-bottom: var(--space-2);
+}
+
+.article-row p {
+  margin-bottom: var(--space-4);
+  color: var(--text-secondary);
+}
+
+.article-row__meta,
+.chip-list,
+.page-updated,
+.source-list span {
+  color: var(--text-tertiary);
+  font-family: "SF Mono", "JetBrains Mono", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.article-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.topic-chip {
+  display: inline-flex;
+  padding: var(--space-1) var(--space-2);
+  border-radius: 4px;
+  background: var(--status-info);
+  color: var(--accent-primary);
+  font-weight: 650;
+}

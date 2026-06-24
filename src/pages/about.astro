@@ -1,0 +1,29 @@
+---
+import { getEntry, render } from "astro:content"
+import BaseLayout from "../layouts/BaseLayout.astro"
+
+const page = await getEntry("pages", "about")
+if (!page || page.data.draft) {
+  throw new Error("About page content is missing or draft-only.")
+}
+
+const { Content } = await render(page)
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(date)
+---
+
+<BaseLayout title={`${page.data.title} | Wonder Tinker`} description={page.data.description} canonicalPath="/about/">
+  <main id="main" class="site-shell page-stack">
+    <article class="page-layout">
+      <header class="page-header">
+        <p class="eyebrow">Site profile</p>
+        <h1>{page.data.title}</h1>
+        <p class="lede">{page.data.description}</p>
+        <p class="page-updated">Updated <time datetime={page.data.updated.toISOString()}>{formatDate(page.data.updated)}</time></p>
+      </header>
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </main>
+</BaseLayout>

@@ -1,0 +1,89 @@
+---
+import { getCollection } from "astro:content"
+import BaseLayout from "../layouts/BaseLayout.astro"
+
+const title = "Wonder Tinker"
+const description = "A quiet Web and AI engineering notebook."
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (left, right) => right.data.published.getTime() - left.data.published.getTime(),
+)
+const recentPosts = posts.slice(0, 3)
+
+const topics = [
+  {
+    label: "Web",
+    detail: "Static delivery, browser surfaces, and publishable interface notes.",
+  },
+  {
+    label: "AI",
+    detail: "Model-assisted implementation notes with source-aware review habits.",
+  },
+  {
+    label: "Build log",
+    detail: "Small verified changes, recorded as the site grows.",
+  },
+] as const
+
+const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://WonderRabbit.github.io")
+const siteHref = (href: string) => new URL(href.replace(/^\//, ""), baseUrl).pathname
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "medium", timeZone: "UTC" }).format(date)
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/">
+  <main id="main" class="site-shell">
+    <header class="masthead" aria-labelledby="site-title">
+      <div class="masthead__intro">
+        <p class="eyebrow">Web and AI field notes</p>
+        <h1 id="site-title">Wonder Tinker</h1>
+        <p class="lede">
+          Recent posts, AI disclosure notes, and Web publishing decisions are visible from
+          the first screen. No newsletter funnel, no analytics layer, no marketing detour.
+        </p>
+      </div>
+      <aside class="status-panel" aria-label="Current scaffold status">
+        <p class="status-panel__label">Topics</p>
+        <p class="status-panel__value">Web / AI / Build log</p>
+        <p class="status-panel__meta">Static Astro output for GitHub Project Pages.</p>
+      </aside>
+    </header>
+
+    <section class="content-grid" aria-labelledby="latest-heading">
+      <section class="primary-card" aria-labelledby="latest-heading">
+        <p class="eyebrow">Latest</p>
+        <h2 id="latest-heading">Recent posts</h2>
+        <div class="article-list">
+          {
+            recentPosts.map((post) => (
+              <article class="article-row">
+                <div class="article-row__meta">
+                  <time datetime={post.data.published.toISOString()}>{formatDate(post.data.published)}</time>
+                  <span>{post.data.category}</span>
+                  {post.data.aiAssisted && <span>AI-assisted</span>}
+                </div>
+                <h3><a href={siteHref(`/blog/${post.id}/`)}>{post.data.title}</a></h3>
+                <p>{post.data.description}</p>
+                <div class="chip-list" aria-label="Post topics">
+                  {post.data.tags.map((tag) => <span class="topic-chip">{tag}</span>)}
+                </div>
+              </article>
+            ))
+          }
+        </div>
+        <a class="text-link" href={siteHref("/blog/")}>Read all posts</a>
+      </section>
+
+      <div class="topic-list" aria-label="Planned topic lanes">
+        {
+          topics.map((topic) => (
+            <article class="topic-card">
+              <p class="topic-card__label">{topic.label}</p>
+              <p>{topic.detail}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</BaseLayout>

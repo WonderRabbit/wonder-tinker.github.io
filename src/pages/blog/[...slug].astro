@@ -1,0 +1,118 @@
+---
+import { getCollection, render } from "astro:content"
+import type { CollectionEntry } from "astro:content"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+
+type Props = {
+  readonly post: CollectionEntry<"posts">
+}
+
+type JsonLdValue =
+  | string
+  | number
+  | boolean
+  | null
+  | readonly JsonLdValue[]
+  | { readonly [key: string]: JsonLdValue }
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft)
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("en", { dateStyle: "long", timeZone: "UTC" }).format(date)
+const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://WonderRabbit.github.io")
+const canonicalPath = `/blog/${post.id}/`
+const canonicalUrl = new URL(canonicalPath.replace(/^\//, ""), baseUrl).toString()
+
+const blogPosting: JsonLdValue = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.published.toISOString(),
+  dateModified: (post.data.updated ?? post.data.published).toISOString(),
+  url: canonicalUrl,
+  mainEntityOfPage: canonicalUrl,
+  author: {
+    "@type": "Organization",
+    name: "Wonder Tinker",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Wonder Tinker",
+  },
+  articleSection: post.data.category,
+  keywords: post.data.tags,
+  isAccessibleForFree: true,
+}
+
+const jsonLd = JSON.stringify(blogPosting).replaceAll("<", "\\u003c")
+---
+
+<BaseLayout
+  title={`${post.data.title} | Wonder Tinker`}
+  description={post.data.description}
+  canonicalPath={canonicalPath}
+  pageType="article"
+>
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd}></script>
+  <main id="main" class="site-shell page-stack">
+    <article class="post-layout">
+      <header class="post-header">
+        <p class="eyebrow">Build note</p>
+        <h1>{post.data.title}</h1>
+        <p class="lede">{post.data.description}</p>
+        <div class="article-row__meta">
+          <span>Published <time datetime={post.data.published.toISOString()}>{formatDate(post.data.published)}</time></span>
+          {
+            post.data.updated && (
+              <span>Updated <time datetime={post.data.updated.toISOString()}>{formatDate(post.data.updated)}</time></span>
+            )
+          }
+          <span>{post.data.category}</span>
+          {post.data.aiAssisted && <span>AI-assisted</span>}
+        </div>
+        <div class="chip-list" aria-label="Post topics">
+          {post.data.tags.map((tag) => <span class="topic-chip">{tag}</span>)}
+        </div>
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <section class="meta-panel" aria-labelledby="ai-notes-heading">
+        <h2 id="ai-notes-heading">AI and source notes</h2>
+        <div class="note-grid">
+          {
+            post.data.modelNotes.map((note) => (
+              <article>
+                <h3>{note.model}</h3>
+                <p>{note.role}</p>
+                <p>{note.humanReview}</p>
+              </article>
+            ))
+          }
+        </div>
+        <h3>Sources</h3>
+        <ul class="source-list">
+          {
+            post.data.sources.map((source) => (
+              <li>
+                <a href={source.url}>{source.title}</a>
+                <span>Accessed {formatDate(source.accessed)}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </article>
+  </main>
+</BaseLayout>
