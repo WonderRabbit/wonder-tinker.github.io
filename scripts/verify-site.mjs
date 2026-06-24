@@ -141,7 +141,10 @@ assertMatches("robots", robots, /Sitemap:\s*https:\/\/wonder-tinker\.github\.io\
 assert(!/wonderrabbit\.github\.io/i.test(robots), "Robots contains the old GitHub Pages owner domain.")
 assert(!/github\.io\/wonder-tinker\.github\.io\//i.test(robots), "Robots contains the old project base path.")
 
+const cname = (await readText(await assertFile("CNAME"))).trim()
+assert(cname === "wonder-tinker.github.io", "CNAME must pin the root Pages domain.")
+
 console.log(`site_verified: ${root}`)
 console.log("routes: home blog post editorial-policy privacy 404")
-console.log("feeds: rss sitemap robots")
+console.log("feeds: rss sitemap robots cname")
 console.log("metadata: BlogPosting JSON-LD AI disclosure source notes")
