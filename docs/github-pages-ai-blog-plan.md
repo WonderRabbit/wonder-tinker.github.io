@@ -47,7 +47,7 @@
 - `@astrojs/sitemap`: canonical URL 목록을 빌드에서 자동 생성한다. [S7]
 - `src/pages/404.astro`: GitHub Pages의 정적 404 페이지로 사용한다.
 
-이 저장소는 `WonderRabbit/wonder-tinker.github.io`다. GitHub Pages의 root user/org site가 되려면 저장소명이 보통 `<owner>.github.io`여야 하므로, 현재 이름 그대로라면 기본 배포 URL은 project Pages 형태인 `https://WonderRabbit.github.io/wonder-tinker.github.io/`로 보는 것이 안전하다. 따라서 `site: "https://WonderRabbit.github.io"`와 `base: "/wonder-tinker.github.io"`를 기본값으로 둔다. 나중에 저장소를 `WonderRabbit.github.io`로 바꾸거나 커스텀 도메인을 붙이면 `base`를 제거한다. [S1], [S4], [S17]
+이 저장소의 최종 GitHub Pages 도메인은 `https://wonder-tinker.github.io/`다. 따라서 root user/org Pages 형태로 배포되도록 `site: "https://wonder-tinker.github.io"`를 사용하고 `base`는 설정하지 않는다. owner 하위 project Pages 경로는 이 저장소의 배포 도메인이 아니다. [S1], [S4], [S17]
 
 ## 3. 설치 계획
 
@@ -75,14 +75,13 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://WonderRabbit.github.io",
-  base: "/wonder-tinker.github.io",
+  site: "https://wonder-tinker.github.io",
   trailingSlash: "always",
   integrations: [mdx(), sitemap()],
 });
 ```
 
-커스텀 도메인을 쓰거나 저장소를 `WonderRabbit.github.io`로 변경하면 `site`를 최종 URL로 바꾸고 `base`를 제거한다.
+도메인이 바뀌면 `site`를 최종 URL로 바꾸되, root Pages 배포에서는 `base`를 추가하지 않는다.
 
 4. 콘텐츠 스키마 초안
 
@@ -264,7 +263,7 @@ jobs:
 - RSS, sitemap, robots.txt
 - GitHub Pages deploy workflow
 - `docs/editorial-policy.md`, `docs/privacy.md`
-- 샘플 글 1개: “Wonder Tinker 시작 기록” at `https://WonderRabbit.github.io/wonder-tinker.github.io/blog/wonder-tinker-start/`
+- 샘플 글 1개: “Wonder Tinker 시작 기록” at `https://wonder-tinker.github.io/blog/wonder-tinker-start/`
 
 완료 기준:
 

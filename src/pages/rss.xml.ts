@@ -8,7 +8,7 @@ export async function GET(context: APIContext): Promise<Response> {
     (left, right) => right.data.published.getTime() - left.data.published.getTime(),
   )
 
-  const baseUrl = new URL(import.meta.env.BASE_URL, context.site ?? "https://WonderRabbit.github.io")
+  const baseUrl = new URL(import.meta.env.BASE_URL, context.site ?? "https://wonder-tinker.github.io")
 
   return rss({
     title: "Wonder Tinker",

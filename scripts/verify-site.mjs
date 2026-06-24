@@ -9,7 +9,6 @@ class SiteVerificationError extends Error {
 }
 
 const distRoot = "dist"
-const projectRoot = join(distRoot, "wonder-tinker.github.io")
 
 const isExpectedMissingPathError = (error) => error instanceof Error && "code" in error && error.code === "ENOENT"
 
@@ -25,7 +24,7 @@ const exists = async (path) => {
   }
 }
 
-const root = (await exists(projectRoot)) ? projectRoot : distRoot
+const root = distRoot
 const filePath = (...parts) => join(root, ...parts)
 
 const readText = async (path) => readFile(path, "utf8")
@@ -86,7 +85,7 @@ function assertBlogPostingJsonLd(postHtml, expected) {
   const blogPosting = parsed.find((entry) => entry && entry["@type"] === "BlogPosting")
   assert(blogPosting, "Post page is missing parseable BlogPosting JSON-LD.")
   assert(blogPosting.headline?.includes(expected.headline), "BlogPosting headline is unexpected.")
-  assert(blogPosting.url?.includes(expected.path), "BlogPosting URL is missing project base.")
+  assert(blogPosting.url === expected.url, "BlogPosting URL is unexpected.")
   assert(blogPosting.articleSection === expected.category, "BlogPosting articleSection is unexpected.")
 }
 
@@ -103,7 +102,7 @@ const postHtml = await routeHtml("post", ["blog", "wonder-tinker-start", "index.
 ])
 assertBlogPostingJsonLd(postHtml, {
   headline: "Wonder Tinker",
-  path: "/wonder-tinker.github.io/blog/wonder-tinker-start/",
+  url: "https://wonder-tinker.github.io/blog/wonder-tinker-start/",
   category: "Site notes",
 })
 const windowsPostHtml = await routeHtml("windows dGPU post", ["blog", "windows10-disable-dgpu-for-general-apps", "index.html"], [
@@ -116,7 +115,7 @@ const windowsPostHtml = await routeHtml("windows dGPU post", ["blog", "windows10
 ])
 assertBlogPostingJsonLd(windowsPostHtml, {
   headline: "Windows 10",
-  path: "/wonder-tinker.github.io/blog/windows10-disable-dgpu-for-general-apps/",
+  url: "https://wonder-tinker.github.io/blog/windows10-disable-dgpu-for-general-apps/",
   category: "Windows 운영",
 })
 
@@ -133,10 +132,14 @@ const sitemapPath = (await exists(filePath("sitemap-index.xml"))) ? await assert
 const sitemap = await readText(sitemapPath)
 assertMatches("sitemap", sitemap, /<sitemapindex\b|<urlset\b|<loc>/i)
 assertMatches("sitemap", sitemap, /wonder-tinker\.github\.io/)
+assert(!/wonderrabbit\.github\.io/i.test(sitemap), "Sitemap contains the old GitHub Pages owner domain.")
+assert(!/github\.io\/wonder-tinker\.github\.io\//i.test(sitemap), "Sitemap contains the old project base path.")
 
 const robots = await readText(await assertFile("robots.txt"))
 assertMatches("robots", robots, /User-agent:\s*\*/i)
-assertMatches("robots", robots, /Sitemap:\s*https:\/\/WonderRabbit\.github\.io\/wonder-tinker\.github\.io\/sitemap-index\.xml/i)
+assertMatches("robots", robots, /Sitemap:\s*https:\/\/wonder-tinker\.github\.io\/sitemap-index\.xml/i)
+assert(!/wonderrabbit\.github\.io/i.test(robots), "Robots contains the old GitHub Pages owner domain.")
+assert(!/github\.io\/wonder-tinker\.github\.io\//i.test(robots), "Robots contains the old project base path.")
 
 console.log(`site_verified: ${root}`)
 console.log("routes: home blog post editorial-policy privacy 404")

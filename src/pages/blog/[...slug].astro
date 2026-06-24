@@ -27,7 +27,7 @@ const { post } = Astro.props
 const { Content } = await render(post)
 const formatDate = (date: Date) =>
   new Intl.DateTimeFormat("en", { dateStyle: "long", timeZone: "UTC" }).format(date)
-const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://WonderRabbit.github.io")
+const baseUrl = new URL(import.meta.env.BASE_URL, Astro.site ?? "https://wonder-tinker.github.io")
 const canonicalPath = `/blog/${post.id}/`
 const canonicalUrl = new URL(canonicalPath.replace(/^\//, ""), baseUrl).toString()
 
